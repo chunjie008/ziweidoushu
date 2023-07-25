@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>紫微斗数</title>
+</head>
+<body>
+  <svg id="circleRing" width="100%" height="100vh" viewBox="0 0 100 100">
+    <!-- 绘制外圆（较大的圆） -->
+    <circle cx="50" cy="50" r="48" fill="none" stroke="black" stroke-width="0.2" />
+
+    <!-- 绘制内圆（较小的圆） -->
+    <circle cx="50" cy="50" r="30" fill="none" stroke="black" stroke-width="0.2" />
+    
+    <!-- 绘制内圆（较小的圆） -->
+    <circle cx="50" cy="50" r="25" fill="none" stroke="black" stroke-width="0.2" />
+    
+        <!-- 绘制内圆（较小的圆） -->
+    <circle cx="50" cy="50" r="20" fill="none" stroke="black" stroke-width="0.2" />
+
+    <!-- 绘制12等份的线段 -->
+    <g id="equalParts">
+      <!-- 使用JavaScript在循环中添加12条线段 -->
+    </g>
+
+    <!-- 绘制12等份的地支文字 -->
+    <g id="zodiacText">
+      <!-- 使用JavaScript在循环中添加12个地支文字 -->
+    </g>
+    
+        <!-- 绘制12等份的宫位文字 -->
+    <g id="gongText" style="color: blue;">
+      <!-- 使用JavaScript在循环中添加12个宫位文字 -->
+    </g>
+  </svg>
+
+  <script>
+  
+    var year = "";
+    var month = 5-1;
+    var day = "";
+    var time = 2-1;
+    // 计算每个等份之间的角度
+    const angleIncrement = 360 / 12;
+
+    // 计算屏幕的最大高度
+    const maxHeight = window.innerHeight;
+
+    // 将SVG的高度设置为屏幕的最大高度
+    const svgElement = document.getElementById("circleRing");
+    svgElement.setAttribute("height", maxHeight);
+
+    // 使用JavaScript绘制12等份的线段和地支文字
+    const equalPartsGroup = document.getElementById("equalParts");
+    const zodiacTextGroup = document.getElementById("zodiacText");
+    const gongTextGroup = document.getElementById("gongText");
+    for (let i = 0; i < 12; i++) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      const angle0 = i * angleIncrement;
+      const angle1 =(i * angleIncrement - 10) % 360;
+      const angle = (i * angleIncrement + 15) % 360;
+      const x1 = 50 + 48 * Math.cos((angle0 - 90) * Math.PI / 180); // 外圆半径为48
+      const y1 = 50 + 48 * Math.sin((angle0 - 90) * Math.PI / 180); // 外圆半径为48
+      const x2 = 50 + 20 * Math.cos((angle0 - 90) * Math.PI / 180); // 内圆半径为20
+      const y2 = 50 + 20 * Math.sin((angle0 - 90) * Math.PI / 180); // 内圆半径为20
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "black");
+      line.setAttribute("stroke-width", "0.2");
+      equalPartsGroup.appendChild(line);
+
+      // 添加地支文字
+      const zodiacText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      const textX = 50 + 22.5 * Math.cos((angle - 90) * Math.PI / 180); // 保持文字角度不变
+      const textY = 50 + 22.5 * Math.sin((angle - 90) * Math.PI / 180); // 保持文字角度不变
+      zodiacText.setAttribute("x", textX);
+      zodiacText.setAttribute("y", textY);
+      zodiacText.setAttribute("font-size", "2");
+      zodiacText.setAttribute("text-anchor", "middle"); // 设置文字居中对齐
+      zodiacText.setAttribute("dominant-baseline", "middle"); // 设置文字垂直居中对齐
+      zodiacText.textContent = getZodiacText(i);
+      zodiacTextGroup.appendChild(zodiacText);
+    
+    
+          // 添加宫位文字
+      const gongText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      const gX = 50 + 27.5 * Math.cos((angle - 90) * Math.PI / 180); // 保持文字角度不变
+      const gY = 50 + 27.5 * Math.sin((angle - 90) * Math.PI / 180); // 保持文字角度不变
+      gongText.setAttribute("x", gX);
+      gongText.setAttribute("y", gY);
+      gongText.setAttribute("font-size", "2");
+      //gongText.setAttribute("color", "#ff0000");
+      gongText.setAttribute("text-anchor", "middle"); // 设置文字居中对齐
+      gongText.setAttribute("dominant-baseline", "middle"); // 设置文字垂直居中对齐
+      gongText.textContent = getGongText(i);
+      gongTextGroup.appendChild(gongText);
+    }
+
+    // 根据索引获取对应的地支文字
+    function getZodiacText(index) {
+      const zodiacs = [ "未", "申", "酉", "戌", "亥","子", "丑", "寅", "卯", "辰", "巳","午" ];
+      return zodiacs[index];
+    }
+    
+        // 根据索引获取对应的宫位文字
+    function getGongText(index) {
+    index = index -7
+    index =index - month +time;
+     if(index<0){
+     	index = index +12;
+     } 
+     //const zodiacs = [ "命宫", "兄弟", "夫妻", "子女", "财帛", "疾厄","迁移", "交友", "事业", "田宅", "福德", "父母"];
+      //const zodiacs = [ "父母", "福德", "田宅", "事业", "交友", "迁移","疾厄", "财帛", "子女", "夫妻", "兄弟", "命宫"];
+      const zodiacs = [ "命宫","父母", "福德", "田宅", "事业", "交友", "迁移","疾厄", "财帛", "子女", "夫妻", "兄弟" ];
+      var shen = 0-month-time-5;
+       if(shen<0){
+     	shen = shen +12;
+     } 
+      if(shen==index){
+      return "("+zodiacs[index]+")";
+      }
+      return zodiacs[index];
+    }
+  </script>
+</body>
+</html>
